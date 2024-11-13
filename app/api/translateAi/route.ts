@@ -8,7 +8,8 @@ interface TranslateRequestBody {
   targetLangs: string[];
 }
 
-// Initialize OpenAI with your API key
+
+
 const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_SECRET
 });
@@ -23,15 +24,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    
+
     const translations: Record<string, string> = {};
 
     for (const targetLang of targetLangs) {
-        const prompt = `Translate this text from ${sourceLang} to a ${targetLang}. ONLY return the translated text without any explanations or additional context. Just the translation: "${text}"`;
+      const prompt = `
+      Translate the following text from ${sourceLang} to ${targetLang}. Please pay attention to context, especially when translating words that imply small items from ${sourceLang}.
+      Only return the translated text without explanations or additional context. Maintain any HTML elements as they are. Do not eranged numbers if they are present
+      Text: "${text}"
+      `;
+
 
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
-            { role: "system", content: "You are a translation assistant. Strictly respond with ONLY the translated text" },
+            { role: "system", content: "You are a translation assistant. Responding strictly with ONLY the translated text."},
             { role: "user", content: prompt }
           ],
       });
