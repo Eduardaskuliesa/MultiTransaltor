@@ -1,7 +1,7 @@
 // components/ProductForm.tsx
 
 import React, { useState, FormEvent } from 'react';
-import { Send, Loader } from 'lucide-react';
+import { Send, Loader } from 'lucide-react'
 
 interface ProductDetails {
   name: string;
@@ -82,13 +82,29 @@ const ProductForm: React.FC<ProductFormProps> = ({
     }
   };
 
+  const normalizeId = (text: string): string => {
+    return text
+      .toLowerCase() // Convert to lowercase
+      .replace(/[ėę]/g, 'e')
+      .replace(/[į]/g, 'i')
+      .replace(/[č]/g, 'c')
+      .replace(/[ą]/g, 'a')
+      .replace(/[ū]/g, 'u')
+      .replace(/[^a-z0-9-]/g, ''); // Remove any remaining non-ASCII characters
+  };
+
   const processProductTranslations = (translations: Record<string, string>) => {
     const newProductTranslations = Object.entries(translations).reduce(
       (acc, [lang, translatedText]) => {
         const decodedText = decodeURIComponent(translatedText);
         console.log(`Decoded translation for ${lang}:`, decodedText);
+  
+        // Split the decoded text by newline to extract name, internalTitle, and id
         const [name, internalTitle, id] = decodedText.split('\n');
-        const formattedId = id.toLowerCase();
+  
+        // Normalize `id` to remove accents and special characters
+        const formattedId = id ? normalizeId(id) : '';
+  
         acc[lang] = { name, internalTitle, id: formattedId };
         return acc;
       },
@@ -96,7 +112,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
     );
     setProductTranslations(newProductTranslations);
   };
+  
+  
 
+
+  
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
