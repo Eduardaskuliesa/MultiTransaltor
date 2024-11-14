@@ -47,10 +47,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: encodeURIComponent(`${productName}\n${productInternalTitle}\n${productId}`), // Encode special characters
+          text: `${productName}\n${productInternalTitle}\n${productId}`,
           sourceLang,
           targetLangs,
         }),
+        
       });
       const data = await res.json();
      console.log('Api response:', data)
@@ -66,6 +67,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
       // Process the translated data
       processProductTranslations(data.translations);
+      console.log(data.translations)
 
       // Close the product form
       setShowProductForm(false);
@@ -96,13 +98,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const processProductTranslations = (translations: Record<string, string>) => {
     const newProductTranslations = Object.entries(translations).reduce(
       (acc, [lang, translatedText]) => {
-        const decodedText = decodeURIComponent(translatedText);
-        console.log(`Decoded translation for ${lang}:`, decodedText);
+        console.log(`Translation for ${lang}:`, translatedText);
   
-        // Split the decoded text by newline to extract name, internalTitle, and id
-        const [name, internalTitle, id] = decodedText.split('\n');
+        
+        const [name, internalTitle, id] = translatedText.split('\n');
   
-        // Normalize `id` to remove accents and special characters
+        
         const formattedId = id ? normalizeId(id) : '';
   
         acc[lang] = { name, internalTitle, id: formattedId };
@@ -112,6 +113,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     );
     setProductTranslations(newProductTranslations);
   };
+  
   
   
 

@@ -16,15 +16,15 @@ const TranslationsDisplay: React.FC<TranslationsDisplayProps> = ({
   availableLanguages,
 }) => {
   const [copiedLanguages, setCopiedLanguages] = useState<Record<string, boolean>>({});
+  
   const handleCopy = (text: string, lang: string) => {
     navigator.clipboard.writeText(text).then(
       () => {
-        
         setCopiedLanguages((prevState) => ({
           ...prevState,
           [lang]: true,
         }));
-       
+        
         setTimeout(() => {
           setCopiedLanguages((prevState) => ({
             ...prevState,
@@ -47,8 +47,9 @@ const TranslationsDisplay: React.FC<TranslationsDisplayProps> = ({
         {Object.entries(translations).map(([lang, translatedText]) => {
           const language = availableLanguages.find((l) => l.code === lang);
           const languageName = language?.name || lang;
-          const cleanedTranslatedText = translatedText.replace(/^"|"$/g, '')
+          const cleanedTranslatedText = translatedText.replace(/^"|"$/g, '');
           const isCopied = copiedLanguages[lang];
+          const characterCount = cleanedTranslatedText.length; // Calculate character length
 
           return (
             <div
@@ -61,7 +62,7 @@ const TranslationsDisplay: React.FC<TranslationsDisplayProps> = ({
                     {languageName}
                   </h3>
                   <div className="flex items-center">
-                  {isCopied && (
+                    {isCopied && (
                       <span className="ml-2 text-green-500">Copied!</span>
                     )}
                     <button
@@ -70,10 +71,12 @@ const TranslationsDisplay: React.FC<TranslationsDisplayProps> = ({
                     >
                       <CopyIcon className="h-6 w-6 text-blue-600 hover:text-blue-700" />
                     </button>
-                    
                   </div>
                 </div>
                 <p className="text-gray-700">{cleanedTranslatedText}</p>
+              </div>
+              <div className="mt-4 text-right text-gray-500">
+                <span>Characters: {characterCount}</span>
               </div>
             </div>
           );

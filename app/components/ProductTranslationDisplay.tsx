@@ -1,7 +1,6 @@
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import { getFlagEmoji } from '../utils/getFlagEmoji';
+import { Copy, CheckCircle } from 'lucide-react';
 
 interface Language {
   code: string;
@@ -23,6 +22,23 @@ const ProductTranslationsDisplay: React.FC<ProductTranslationsDisplayProps> = ({
   productTranslations,
   availableLanguages,
 }) => {
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  console.log(productTranslations)
+  const removeQuotes = (text: string) => {
+
+    return text.replace(/^["']|["']$/g, ''); // Removes both leading and trailing single or double quotes
+  };
+
+  const handleCopy = async (text: string, fieldId: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(fieldId);
+      setTimeout(() => setCopiedField(null), 2000); // Reset after 2 seconds
+    } catch (error) {
+      console.error('Failed to copy text:', error);
+    }
+  };
+
   return (
     <div className="mt-12">
       <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
@@ -46,15 +62,68 @@ const ProductTranslationsDisplay: React.FC<ProductTranslationsDisplayProps> = ({
                     {languageName}
                   </h3>
                 </div>
-                <p className="text-gray-700">
-                  <strong>Product Name:</strong> {details.name}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Internal Title:</strong> {details.internalTitle}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Product ID:</strong> {details.id}
-                </p>
+
+                <div className="flex items-center text-gray-700 mb-2">
+                  <p>
+                    <strong>Product Name:</strong> {removeQuotes(details.name)}
+                  </p>
+                  <span className="text-sm text-gray-500 ml-2">({removeQuotes(details.name).length})</span>
+                  <button
+                    onClick={() => handleCopy(removeQuotes(details.name), `${lang}-name`)}
+                    className="ml-2 text-green-600 hover:text-green-800"
+                  >
+                    {copiedField === `${lang}-name` ? (
+                      <CheckCircle className="w-5 h-5" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                  {copiedField === `${lang}-name` && (
+                    <span className="ml-2 text-green-500">Copied!</span>
+                  )}
+                </div>
+
+                <div className="flex items-center text-gray-700 mb-2">
+                  <p>
+                    <strong>Internal Title:</strong> {removeQuotes(details.internalTitle)}
+                  </p>
+                  <span className="text-sm text-gray-500 ml-2">({removeQuotes(details.internalTitle).length})</span>
+                  <button
+                    onClick={() =>
+                      handleCopy(removeQuotes(details.internalTitle), `${lang}-internalTitle`)
+                    }
+                    className="ml-2 text-green-600 hover:text-green-800"
+                  >
+                    {copiedField === `${lang}-internalTitle` ? (
+                      <CheckCircle className="w-5 h-5" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                  {copiedField === `${lang}-internalTitle` && (
+                    <span className="ml-2 text-green-500">Copied!</span>
+                  )}
+                </div>
+
+                <div className="flex items-center text-gray-700">
+                  <p>
+                    <strong>Product ID:</strong> {removeQuotes(details.id)}
+                  </p>
+                  <span className="text-sm text-gray-500 ml-2">({removeQuotes(details.id).length})</span>
+                  <button
+                    onClick={() => handleCopy(removeQuotes(details.id), `${lang}-id`)}
+                    className="ml-2 text-green-600 hover:text-green-800"
+                  >
+                    {copiedField === `${lang}-id` ? (
+                      <CheckCircle className="w-5 h-5" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                  {copiedField === `${lang}-id` && (
+                    <span className="ml-2 text-green-500">Copied!</span>
+                  )}
+                </div>
               </div>
             </div>
           );

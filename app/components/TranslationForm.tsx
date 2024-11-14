@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Languages, Globe, Send, Plus, Loader } from 'lucide-react';
 
@@ -8,7 +7,7 @@ interface Language {
 }
 
 interface TranslationFormProps {
-  loading: boolean,
+  loading: boolean;
   availableLanguages: Language[];
   sourceLang: string;
   setSourceLang: React.Dispatch<React.SetStateAction<string>>;
@@ -32,7 +31,7 @@ const TranslationForm: React.FC<TranslationFormProps> = ({
   setLoading,
   setError,
 }) => {
-  const [text, setText] = useState<string>(``);
+  const [text, setText] = useState<string>('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -78,10 +77,7 @@ const TranslationForm: React.FC<TranslationFormProps> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-8 bg-white rounded-xl shadow-lg p-8"
-    >
+    <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-xl shadow-lg p-8">
       <div>
         <label className="block text-lg font-medium text-gray-700 mb-3">
           <Languages className="inline-block w-6 h-6 mr-2 text-gray-500" />
@@ -139,27 +135,26 @@ const TranslationForm: React.FC<TranslationFormProps> = ({
 
       {/* Submit Button */}
       <button
-      disabled={loading}
-      type="submit"
-      className="w-full flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      {loading ? (
-        <Loader className="w-6 h-6 mr-3 animate-spin" />
-      ) : (
-        <Send className="w-6 h-6 mr-3" />
-      )}
-      Translate
-    </button>
-  
+        disabled={loading}
+        type="submit"
+        className="w-full flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        {loading ? (
+          <Loader className="w-6 h-6 mr-3 animate-spin" />
+        ) : (
+          <Send className="w-6 h-6 mr-3" />
+        )}
+        Translate
+      </button>
 
       <button
-          type="button"
-          onClick={() => setShowProductForm(true)}
-          className="w-full flex items-center justify-center px-6 py-4 mt-4 border border-transparent text-lg font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-        >
-          <Plus className="w-6 h-6 mr-3" />
-          Add Product Details
-        </button>
+        type="button"
+        onClick={() => setShowProductForm(true)}
+        className="w-full flex items-center justify-center px-6 py-4 mt-4 border border-transparent text-lg font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      >
+        <Plus className="w-6 h-6 mr-3" />
+        Add Product Details
+      </button>
     </form>
   );
 };

@@ -17,6 +17,7 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const { text, targetLangs, sourceLang  } = (await request.json()) as TranslateRequestBody;
+    console.log(text)
     if (!text || !targetLangs || targetLangs.length === 0) {
       return NextResponse.json(
         { error: 'Text and at least one target language are required.' },
@@ -39,13 +40,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
-            { role: "system", content: "You are a translation assistant. Responding strictly with ONLY the translated text."},
+          { role: "system", content: "You are a translation assistant. Return only the translated text. Maintain all special characters such as hyphens (-), underscores (_), slashes (/). Keep all break lines please return them as they were. Do not remove or alter these symbols." },
             { role: "user", content: prompt }
           ],
       });
 
       const translatedText = response.choices[0].message?.content?.trim() || '';
       translations[targetLang] = translatedText;
+      console.log(translatedText)
     }
 
     return NextResponse.json({ translations }, { status: 200 });
