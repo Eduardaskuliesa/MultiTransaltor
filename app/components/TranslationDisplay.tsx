@@ -38,18 +38,20 @@ const TranslationsDisplay: React.FC<TranslationsDisplayProps> = ({
     );
   };
 
+
+
   return (
     <div className="mt-12">
       <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
         Translations
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 max-h-[500px] overflow-y-auto overflow-x-hidden sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {Object.entries(translations).map(([lang, translatedText]) => {
           const language = availableLanguages.find((l) => l.code === lang);
           const languageName = language?.name || lang;
           const cleanedTranslatedText = translatedText.replace(/^"|"$/g, '');
           const isCopied = copiedLanguages[lang];
-          const characterCount = cleanedTranslatedText.length; // Calculate character length
+          const characterCount = cleanedTranslatedText.length;
 
           return (
             <div

@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { Languages, Globe, Send, Plus, Loader } from 'lucide-react';
+import { Languages, Globe, Send, Plus, Loader, Trash2 } from 'lucide-react';
 
 interface Language {
   code: string;
@@ -76,12 +76,17 @@ const TranslationForm: React.FC<TranslationFormProps> = ({
     );
   };
 
+  const handleDelete = () => {
+    setText("")
+  }
+  
   return (
     <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-xl shadow-lg p-8">
       <div>
-        <label className="block text-lg font-medium text-gray-700 mb-3">
+        <label className="text-lg flex flex-row  font-medium text-gray-700 mb-3">
           <Languages className="inline-block w-6 h-6 mr-2 text-gray-500" />
           Text to Translate
+          <button type='button' onClick={handleDelete}><Trash2 className='h-6 ml-2 w-6 text-red-500 hover:text-red-600'></Trash2></button>
         </label>
         <textarea
           value={text}
@@ -121,6 +126,7 @@ const TranslationForm: React.FC<TranslationFormProps> = ({
             {availableLanguages.map((lang) => (
               <div key={lang.code} className="flex items-center space-x-3">
                 <input
+                 checked={targetLangs.includes(lang.code)}
                   type="checkbox"
                   value={lang.code}
                   onChange={handleTargetLangChange}

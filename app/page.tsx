@@ -14,7 +14,7 @@ interface Language {
 
 const Home: React.FC = () => {
   const [sourceLang, setSourceLang] = useState<string>('lt');
-  const [targetLangs, setTargetLangs] = useState<string[]>([]);
+  const [targetLangs, setTargetLangs] = useState<string[]>(['en', 'de', 'lv']);
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [productTranslations, setProductTranslations] = useState<
     Record<string, { name: string; internalTitle: string; id: string }>

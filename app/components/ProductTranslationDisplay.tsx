@@ -25,15 +25,15 @@ const ProductTranslationsDisplay: React.FC<ProductTranslationsDisplayProps> = ({
   const [copiedField, setCopiedField] = useState<string | null>(null);
   console.log(productTranslations)
   const removeQuotes = (text: string) => {
-
-    return text.replace(/^["']|["']$/g, ''); // Removes both leading and trailing single or double quotes
+     console.log(text)
+    return text.replace(/^["']|["']$/g, ''); 
   };
 
   const handleCopy = async (text: string, fieldId: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedField(fieldId);
-      setTimeout(() => setCopiedField(null), 2000); // Reset after 2 seconds
+      setTimeout(() => setCopiedField(null), 2000); 
     } catch (error) {
       console.error('Failed to copy text:', error);
     }
